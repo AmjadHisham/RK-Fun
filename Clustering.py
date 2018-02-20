@@ -7,6 +7,12 @@ from sklearn.metrics.pairwise import pairwise_distances
 from copy import copy  
 from itertools import combinations
 
+
+def cosine_distance(x, y):
+    xy = x.dot(y.T)
+    dist = xy/(norm(x)*norm(y))
+    return 1-dist[0,0]
+
 def brute_force_query(vec, data, k):
     num_data_points = data.shape[0]
     
@@ -124,3 +130,6 @@ def query(vec, model, k, max_search_radius):
     nearest_neighbors['distance'] = pairwise_distances(candidates, vec, metric='cosine').flatten()
     
     return nearest_neighbors.topk('distance', k, reverse=True), len(candidate_set)
+
+# model = local_sensitivity_hash_table(corpus, num_vector=16, seed=143)
+# query(corpus[35817,:], model, k=10, max_search_radius=3)
